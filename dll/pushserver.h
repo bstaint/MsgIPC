@@ -21,6 +21,7 @@ class PushServer
 public:
     PushServer(zmq::context_t *ctx) : pub(*ctx, zmq::socket_type::pub)
     {
+        pub.setsockopt(ZMQ_LINGER, 1);
         pub.bind("tcp://*:5555");
     }
 

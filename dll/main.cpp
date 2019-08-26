@@ -8,7 +8,9 @@
 #include "spdlog/sinks/msvc_sink.h"
 #include "qqdef.h"
 
-PushServer *server = NULL;
+std::shared_ptr<spdlog::sinks::msvc_sink_mt> sink(nullptr);
+std::shared_ptr<spdlog::logger> logger(nullptr);
+std::shared_ptr<PushServer> server(nullptr);
 
 //      如果groupUin = 0 则为私聊
 void __cdecl MyCheckVideoMsg(int a, unsigned long senderUin, unsigned long groupUin, unsigned long * msg)
@@ -62,18 +64,6 @@ BOOL UnHook(LPVOID pTarget)
 
 BOOL APIENTRY DllMain(HINSTANCE hInst, DWORD reason, LPVOID lpReserved)
 {
-//    https://github.com/zeromq/libzmq/issues/1144
-//    load DLL image
-//    a.context_t::context_t
-//    DllMain(LOAD)
-//    DllMain(UNLOAD)
-//    a.context_t::~context_t  <= Assertion failed: Successful WSASTARTUP not yet ...
-//    unload DLL image
-//    不要把context_t声明成全局变量，不然DLL_PROCESS_DETACH时会假死
-    zmq::context_t *ctx = NULL;
-
-    std::shared_ptr<spdlog::sinks::msvc_sink_mt> sink(nullptr);
-    std::shared_ptr<spdlog::logger> logger(nullptr);
 
     switch (reason)
     {
@@ -85,8 +75,11 @@ BOOL APIENTRY DllMain(HINSTANCE hInst, DWORD reason, LPVOID lpReserved)
         spdlog::set_default_logger(logger);
 
         // 启动Push服务器
-        ctx = new zmq::context_t(1);
-        server = new PushServer(ctx);
+        // https://github.com/zeromq/libzmq/issues/1144
+        // https://stackoverflow.com/questions/19795245/zeromq-context-singleton-provided-in-a-dll-crashes-when-program-exits-vs2010
+        // 不删除ctx，不然会导致卸载DLL时假死
+        zmq::context_t* ctx = new zmq::context_t(1);
+        server = std::make_shared<PushServer>(ctx);
 
         // 初始化minhook并挂钩
         MH_Initialize();
@@ -100,9 +93,6 @@ BOOL APIENTRY DllMain(HINSTANCE hInst, DWORD reason, LPVOID lpReserved)
     {
         if(UnHook((LPVOID)MsgHookTarget))
             spdlog::info("UnHook OK!");
-
-        if(server) delete server;
-        if(ctx) delete ctx;
 
         MH_Uninitialize();
     }
