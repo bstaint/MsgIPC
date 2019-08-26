@@ -7,7 +7,7 @@ QQ版本：8.2(17724)
 python目录下nogui.py为非pyside2即可运行。
 
 ## 截图
-![enter image description here](https://raw.githubusercontent.com/bstaint/MsgIPC/master/screenshot.png)
+![screenshot](https://raw.githubusercontent.com/bstaint/MsgIPC/master/doc/screenshot.png)
 
 ## C++ dll
 
