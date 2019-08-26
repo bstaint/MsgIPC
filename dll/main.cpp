@@ -72,18 +72,24 @@ BOOL APIENTRY DllMain(HINSTANCE hInst, DWORD reason, LPVOID lpReserved)
 //    不要把context_t声明成全局变量，不然DLL_PROCESS_DETACH时会假死
     zmq::context_t *ctx = NULL;
 
-    auto sink = std::make_shared<spdlog::sinks::msvc_sink_mt>();
-    auto logger = std::make_shared<spdlog::logger>("MsgIPC", sink);
-    spdlog::set_default_logger(logger);
+    std::shared_ptr<spdlog::sinks::msvc_sink_mt> sink(nullptr);
+    std::shared_ptr<spdlog::logger> logger(nullptr);
 
     switch (reason)
     {
     case DLL_PROCESS_ATTACH:
     {
+        // 设置日志默认输出
+        sink = std::make_shared<spdlog::sinks::msvc_sink_mt>();
+        logger = std::make_shared<spdlog::logger>("MsgIPC", sink);
+        spdlog::set_default_logger(logger);
+
+        // 启动Push服务器
         ctx = new zmq::context_t(1);
         server = new PushServer(ctx);
-        MH_Initialize();
 
+        // 初始化minhook并挂钩
+        MH_Initialize();
         InitQQPtr();
 
         if(SetHook((LPVOID)MsgHookTarget, &MyCheckVideoMsg, &CheckVideoMsg))
