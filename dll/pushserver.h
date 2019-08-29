@@ -3,17 +3,6 @@
 
 #include "zmq.hpp"
 #include "msgpack.hpp"
-
-struct MessageProto
-{
-    ULONG senderUin;
-    ULONG groupUin;
-    std::string nickname;
-    std::string message;
-
-    MSGPACK_DEFINE(senderUin, groupUin, nickname, message);
-};
-
 class PushServer
 {
     zmq::socket_t pub;
