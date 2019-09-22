@@ -11,6 +11,9 @@ python目录下nogui.py为非pyside2即可运行。
 
 ## C++ dll
 
+pro文件中引用第三方pri文件参考：
+[https://github.com/bstaint/modules](https://github.com/bstaint/modules)
+
 #### requires
 
  - minhook
