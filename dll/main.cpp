@@ -15,17 +15,18 @@ std::shared_ptr<PushServer> server(nullptr);
 //      如果groupUin = 0 则为私聊
 void __cdecl MyCheckVideoMsg(int a, unsigned long senderUin, unsigned long groupUin, unsigned long * msg)
 {
-    if(!CheckPtrVaild()) return;
+    if(CheckPtrVaild());
+    {
+        wchar_t * nickname = NULL;
+        wchar_t * text = NULL;
+    //        获取消息时间
+    //    __int64 timestamp = GetMsgTime(msg);
+        GetNickname(&nickname, senderUin);
+        GetMsgAbstract(&text, msg);
 
-    wchar_t * nickname = NULL;
-    wchar_t * text = NULL;
-//        获取消息时间
-//    __int64 timestamp = GetMsgTime(msg);
-    GetNickname(&nickname, senderUin);
-    GetMsgAbstract(&text, msg);
-
-//        spdlog::info("timestamp = {0} groupUin = {1}, buddyUin = {2}", timestamp, groupUin, buddyUin);
-    server->push(senderUin, groupUin, nickname, text);
+    //   spdlog::info("timestamp = {0} groupUin = {1}, buddyUin = {2}", timestamp, groupUin, buddyUin);
+        server->push(senderUin, groupUin, nickname, text);
+    }
 
     CheckVideoMsg(a, senderUin, groupUin, msg);
 }
@@ -64,7 +65,6 @@ BOOL UnHook(LPVOID pTarget)
 
 BOOL APIENTRY DllMain(HINSTANCE hInst, DWORD reason, LPVOID lpReserved)
 {
-
     switch (reason)
     {
     case DLL_PROCESS_ATTACH:
@@ -81,7 +81,7 @@ BOOL APIENTRY DllMain(HINSTANCE hInst, DWORD reason, LPVOID lpReserved)
         zmq::context_t* ctx = new zmq::context_t(1);
         server = std::make_shared<PushServer>(ctx);
 
-        // 初始化minhook并挂钩
+        // 初始化minhook并hook
         MH_Initialize();
         InitQQPtr();
 
