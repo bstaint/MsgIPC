@@ -1,9 +1,7 @@
 import sys
 import zmq
 import msgpack
-from PySide2 import QtWidgets
-from PySide2 import QtCore
-from PySide2 import QtCore
+from PySide2 import QtWidgets, QtCore
 from ui_main import Ui_Form
 
 
