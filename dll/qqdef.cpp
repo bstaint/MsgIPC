@@ -1,4 +1,5 @@
 #include "qqdef.h"
+#include "spdlog/spdlog.h"
 
 ULONG_PTR MsgHookTarget = NULL;
 CheckVideoMsg_t CheckVideoMsg = NULL;
@@ -24,6 +25,11 @@ void InitQQPtr()
 
 bool CheckPtrVaild()
 {
+    spdlog::info("GetMsgTime: {0:x}, CheckVideoMsg: {1:x}, GetMsgAbstract: {2:x}, GetNickname: {3:x}",
+                 (ULONG_PTR)GetMsgTime,
+                 (ULONG_PTR)CheckVideoMsg,
+                 (ULONG_PTR)GetMsgAbstract,
+                 (ULONG_PTR)GetNickname);
     if(GetMsgTime &&  CheckVideoMsg && GetMsgAbstract &&  GetNickname)
         return true;
 

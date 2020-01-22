@@ -13,7 +13,8 @@
 #define GetNickname_Symbol "?GetNickname@Contact@Util@@YA?AVCTXStringW@@K@Z"
 
 //void __cdecl Util::Msg::CheckVideoMsg(int,unsigned long,unsigned long,struct ITXMsgPack *)
-typedef void (__cdecl* CheckVideoMsg_t)(int, unsigned long, unsigned long, unsigned long *);
+// typedef void (__cdecl* CheckVideoMsg_t)(int, unsigned long, unsigned long, unsigned long *);
+typedef void (__cdecl* CheckVideoMsg_t)(int, unsigned long, unsigned long, unsigned long, unsigned long *);
 //__int64 __cdecl Util::Msg::GetMsgTime(struct ITXMsgPack *)
 typedef __int64 (__cdecl* GetMsgTime_t)(unsigned long *);
 //class CTXStringW __cdecl Util::Msg::GetMsgAbstract(struct ITXMsgPack *)

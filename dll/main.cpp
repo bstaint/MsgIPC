@@ -13,7 +13,7 @@ std::shared_ptr<spdlog::logger> logger(nullptr);
 std::shared_ptr<PushServer> server(nullptr);
 
 //      如果groupUin = 0 则为私聊
-void __cdecl MyCheckVideoMsg(int a, unsigned long senderUin, unsigned long groupUin, unsigned long * msg)
+void __cdecl MyCheckVideoMsg(int a, unsigned long senderUin, unsigned long flag, unsigned long groupUin, unsigned long * msg)
 {
     spdlog::info("MyCheckVideoMsg begin");
 
@@ -26,11 +26,14 @@ void __cdecl MyCheckVideoMsg(int a, unsigned long senderUin, unsigned long group
         GetNickname(&nickname, senderUin);
         GetMsgAbstract(&text, msg);
 
-    //   spdlog::info("timestamp = {0} groupUin = {1}, buddyUin = {2}", timestamp, groupUin, buddyUin);
+        spdlog::info("push begin");
+        spdlog::info("senderUin = {0:x}", senderUin);
+        spdlog::info("groupUin = {0:x}", groupUin);
+        spdlog::info("flag = {0:x}", flag);
         server->push(senderUin, groupUin, nickname, text);
     }
 
-    CheckVideoMsg(a, senderUin, groupUin, msg);
+    CheckVideoMsg(a, senderUin, flag, groupUin, msg);
 }
 
 
