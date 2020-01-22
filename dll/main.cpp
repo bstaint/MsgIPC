@@ -15,6 +15,8 @@ std::shared_ptr<PushServer> server(nullptr);
 //      如果groupUin = 0 则为私聊
 void __cdecl MyCheckVideoMsg(int a, unsigned long senderUin, unsigned long groupUin, unsigned long * msg)
 {
+    spdlog::info("MyCheckVideoMsg begin");
+
     if(CheckPtrVaild())
     {
         wchar_t * nickname = NULL;
@@ -35,6 +37,9 @@ void __cdecl MyCheckVideoMsg(int a, unsigned long senderUin, unsigned long group
 BOOL SetHook(LPVOID pTarget, LPVOID pDest, LPVOID pOld)
 {
     MH_STATUS ret = MH_OK;
+
+    spdlog::info("SetHook begin");
+    spdlog::info("pTarget: {}", pTarget);
 
     ret = MH_CreateHook(pTarget, pDest, reinterpret_cast<LPVOID*>(pOld));
     if (ret != MH_OK)

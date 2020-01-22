@@ -3,7 +3,10 @@
 
 #include <Windows.h>
 
-#define CheckVideoMsg_Symbol "?CheckVideoMsg@Msg@Util@@YAXHKKPAUITXMsgPack@@@Z"
+// 8.2
+//#define CheckVideoMsg_Symbol "?CheckVideoMsg@Msg@Util@@YAXHKKPAUITXMsgPack@@@Z"
+// 9.2.3 (26595)
+#define CheckVideoMsg_Symbol "?CheckVideoMsg@Msg@Util@@YAXHKKKPAUITXMsgPack@@@Z"
 #define GetMsgAbstract_Symbol "?GetMsgAbstract@Msg@Util@@YA?AVCTXStringW@@PAUITXMsgPack@@@Z"
 #define GetMsgTime_Symbol "?GetMsgTime@Msg@Util@@YA_JPAUITXMsgPack@@@Z"
 #define GetMsgDumpString_Symbol "?GetMsgDumpString@Msg@Util@@YA?AVCTXStringW@@PAUITXMsgPack@@@Z"
