@@ -1,2 +1,2 @@
-msgpack==0.6.1
-pyzmq==18.1.0
+asyncio==3.4.3
+websockets==8.1
