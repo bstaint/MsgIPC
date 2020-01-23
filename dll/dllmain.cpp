@@ -3,12 +3,12 @@
 #include "packet.h"
 #include "client.h"
 
-moodycamel::BlockingConcurrentQueue<msgipc::MessageChat> kQueue;
-
 using namespace msgipc;
 
 std::shared_ptr<spdlog::sinks::msvc_sink_mt> sink(nullptr);
 std::shared_ptr<spdlog::logger> logger(nullptr);
+
+moodycamel::BlockingConcurrentQueue<msgipc::MessageChat> kQueue;
 
 //      如果groupUin = 0 则为私聊
 void __cdecl MyCheckVideoMsg(int a, unsigned long senderUin, /*unsigned long unknown, */unsigned long groupUin, unsigned long * msg)
