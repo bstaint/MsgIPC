@@ -1,22 +1,12 @@
-#include "pushserver.h"
-#include <Windows.h>
-#include <vector>
-#include <string>
-
-#include "MinHook.h"
-#include "spdlog/spdlog.h"
-#include "spdlog/sinks/msvc_sink.h"
-#include "qqdef.h"
+#include <qqdef.h>
 
 std::shared_ptr<spdlog::sinks::msvc_sink_mt> sink(nullptr);
 std::shared_ptr<spdlog::logger> logger(nullptr);
-std::shared_ptr<PushServer> server(nullptr);
 
 //      如果groupUin = 0 则为私聊
-void __cdecl MyCheckVideoMsg(int a, unsigned long senderUin, unsigned long flag, unsigned long groupUin, unsigned long * msg)
+void __cdecl MyCheckVideoMsg(int a, unsigned long senderUin, unsigned long unknown, unsigned long groupUin, unsigned long * msg)
 {
     spdlog::info("MyCheckVideoMsg begin");
-
     if(CheckPtrVaild())
     {
         wchar_t * nickname = NULL;
@@ -26,14 +16,10 @@ void __cdecl MyCheckVideoMsg(int a, unsigned long senderUin, unsigned long flag,
         GetNickname(&nickname, senderUin);
         GetMsgAbstract(&text, msg);
 
-        spdlog::info("push begin");
-        spdlog::info("senderUin = {0:x}", senderUin);
-        spdlog::info("groupUin = {0:x}", groupUin);
-        spdlog::info("flag = {0:x}", flag);
-        server->push(senderUin, groupUin, nickname, text);
+        spdlog::info("senderUin: {0:x}, groupUin: {1:x}, unknown: {2:x}", senderUin, groupUin, unknown);
     }
 
-    CheckVideoMsg(a, senderUin, flag, groupUin, msg);
+    CheckVideoMsg(a, senderUin, unknown, groupUin, msg);
 }
 
 
@@ -41,9 +27,7 @@ BOOL SetHook(LPVOID pTarget, LPVOID pDest, LPVOID pOld)
 {
     MH_STATUS ret = MH_OK;
 
-    spdlog::info("SetHook begin");
-    spdlog::info("pTarget: {}", pTarget);
-
+    spdlog::info("SetHook begin, pTarget: {}", pTarget);
     ret = MH_CreateHook(pTarget, pDest, reinterpret_cast<LPVOID*>(pOld));
     if (ret != MH_OK)
     {
@@ -81,13 +65,6 @@ BOOL APIENTRY DllMain(HINSTANCE hInst, DWORD reason, LPVOID lpReserved)
         sink = std::make_shared<spdlog::sinks::msvc_sink_mt>();
         logger = std::make_shared<spdlog::logger>("MsgIPC", sink);
         spdlog::set_default_logger(logger);
-
-        // 启动Push服务器
-        // https://github.com/zeromq/libzmq/issues/1144
-        // https://stackoverflow.com/questions/19795245/zeromq-context-singleton-provided-in-a-dll-crashes-when-program-exits-vs2010
-        // 不删除ctx，不然会导致卸载DLL时假死
-        zmq::context_t* ctx = new zmq::context_t(1);
-        server = std::make_shared<PushServer>(ctx);
 
         // 初始化minhook并hook
         MH_Initialize();

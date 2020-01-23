@@ -1,7 +1,7 @@
 #ifndef QQDEF_H
 #define QQDEF_H
 
-#include <Windows.h>
+#include "precompiled.h"
 
 // 8.2
 //#define CheckVideoMsg_Symbol "?CheckVideoMsg@Msg@Util@@YAXHKKPAUITXMsgPack@@@Z"

@@ -1,5 +1,4 @@
 #include "qqdef.h"
-#include "spdlog/spdlog.h"
 
 ULONG_PTR MsgHookTarget = NULL;
 CheckVideoMsg_t CheckVideoMsg = NULL;
