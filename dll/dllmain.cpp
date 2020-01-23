@@ -1,11 +1,20 @@
-#include <qqdef.h>
+#include "precompiled.h"
+#include "qqdef.h"
+#include "packet.h"
+#include "client.h"
+
+moodycamel::BlockingConcurrentQueue<msgipc::MessageChat> kQueue;
+
+using namespace msgipc;
 
 std::shared_ptr<spdlog::sinks::msvc_sink_mt> sink(nullptr);
 std::shared_ptr<spdlog::logger> logger(nullptr);
 
 //      如果groupUin = 0 则为私聊
-void __cdecl MyCheckVideoMsg(int a, unsigned long senderUin, unsigned long unknown, unsigned long groupUin, unsigned long * msg)
+void __cdecl MyCheckVideoMsg(int a, unsigned long senderUin, /*unsigned long unknown, */unsigned long groupUin, unsigned long * msg)
 {
+    static std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> conv;
+
     spdlog::info("MyCheckVideoMsg begin");
     if(CheckPtrVaild())
     {
@@ -16,12 +25,61 @@ void __cdecl MyCheckVideoMsg(int a, unsigned long senderUin, unsigned long unkno
         GetNickname(&nickname, senderUin);
         GetMsgAbstract(&text, msg);
 
-        spdlog::info("senderUin: {0:x}, groupUin: {1:x}, unknown: {2:x}", senderUin, groupUin, unknown);
+        spdlog::info("senderUin: {0:x}, groupUin: {1:x}", senderUin, groupUin);
+        kQueue.enqueue(MessageChat(senderUin,
+                                   groupUin,
+                                   conv.to_bytes(nickname),
+                                   conv.to_bytes(text)));
     }
 
-    CheckVideoMsg(a, senderUin, unknown, groupUin, msg);
+    CheckVideoMsg(a, senderUin/*, unknown*/, groupUin, msg);
 }
 
+void OnMessageCallback(const std::string& text)
+{
+    boost::property_tree::ptree item;
+
+    spdlog::info(text);
+//    try {
+//        item = PacketLoad(text);
+//        if(item.get<int>("type") != PSEND)
+//        {
+//            std::cout << "invaild type\n";
+//            return;
+//        }
+
+//        switch (item.get<int>("errno")) {
+//        case PTEST:
+//            std::cout << "This is a test command\n";
+//            break;
+//        default:
+//            break;
+//        }
+
+//    } catch (...) {
+//        std::cout << "unknown message\n";
+//    }
+}
+
+DWORD WINAPI WebSocketProc(HMODULE hModule)
+{
+    kClient.setCallback(OnMessageCallback);
+    kClient.retry_connect();
+    return 0;
+}
+
+DWORD WINAPI RecvMsgProc(HMODULE hModule)
+{
+    MessageChat chat;
+    while(1)
+    {
+        kQueue.wait_dequeue(chat);
+        std::string s = PacketDump(msgipc::PRECV, msgipc::POK, &chat);
+        if(kClient.is_connected())
+            kClient.send(s);
+    }
+    return 0;
+}
 
 BOOL SetHook(LPVOID pTarget, LPVOID pDest, LPVOID pOld)
 {
@@ -70,12 +128,16 @@ BOOL APIENTRY DllMain(HINSTANCE hInst, DWORD reason, LPVOID lpReserved)
         MH_Initialize();
         InitQQPtr();
 
+        CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)WebSocketProc, NULL, 0, NULL);
+        CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)RecvMsgProc, NULL, 0, NULL);
+
         if(SetHook((LPVOID)MsgHookTarget, &MyCheckVideoMsg, &CheckVideoMsg))
             spdlog::info("SetHook OK!");
     }
         break;
     case DLL_PROCESS_DETACH:
     {
+//        TODO: DLL Detach Crash.
         if(UnHook((LPVOID)MsgHookTarget))
             spdlog::info("UnHook OK!");
 

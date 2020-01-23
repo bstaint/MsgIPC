@@ -4,17 +4,19 @@
 #include "precompiled.h"
 
 // 8.2
-//#define CheckVideoMsg_Symbol "?CheckVideoMsg@Msg@Util@@YAXHKKPAUITXMsgPack@@@Z"
+#define CheckVideoMsg_Symbol "?CheckVideoMsg@Msg@Util@@YAXHKKPAUITXMsgPack@@@Z"
 // 9.2.3 (26595)
-#define CheckVideoMsg_Symbol "?CheckVideoMsg@Msg@Util@@YAXHKKKPAUITXMsgPack@@@Z"
+//#define CheckVideoMsg_Symbol "?CheckVideoMsg@Msg@Util@@YAXHKKKPAUITXMsgPack@@@Z"
 #define GetMsgAbstract_Symbol "?GetMsgAbstract@Msg@Util@@YA?AVCTXStringW@@PAUITXMsgPack@@@Z"
 #define GetMsgTime_Symbol "?GetMsgTime@Msg@Util@@YA_JPAUITXMsgPack@@@Z"
 #define GetMsgDumpString_Symbol "?GetMsgDumpString@Msg@Util@@YA?AVCTXStringW@@PAUITXMsgPack@@@Z"
 #define GetNickname_Symbol "?GetNickname@Contact@Util@@YA?AVCTXStringW@@K@Z"
 
+// TODO: SendAutoReply API
+
 //void __cdecl Util::Msg::CheckVideoMsg(int,unsigned long,unsigned long,struct ITXMsgPack *)
-// typedef void (__cdecl* CheckVideoMsg_t)(int, unsigned long, unsigned long, unsigned long *);
-typedef void (__cdecl* CheckVideoMsg_t)(int, unsigned long, unsigned long, unsigned long, unsigned long *);
+ typedef void (__cdecl* CheckVideoMsg_t)(int, unsigned long, unsigned long, unsigned long *);
+//typedef void (__cdecl* CheckVideoMsg_t)(int, unsigned long, unsigned long, unsigned long, unsigned long *);
 //__int64 __cdecl Util::Msg::GetMsgTime(struct ITXMsgPack *)
 typedef __int64 (__cdecl* GetMsgTime_t)(unsigned long *);
 //class CTXStringW __cdecl Util::Msg::GetMsgAbstract(struct ITXMsgPack *)

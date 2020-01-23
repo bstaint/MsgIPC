@@ -4,12 +4,16 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
+        client.cpp \
         dllmain.cpp \
+        packet.cpp \
         qqdef.cpp
 
 LIBS += -luser32
 
 HEADERS += \
+    client.h \
+    packet.h \
     precompiled.h \
     qqdef.h
 
