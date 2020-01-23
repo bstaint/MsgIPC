@@ -37,7 +37,7 @@ void __cdecl MyCheckVideoMsg(int a, unsigned long senderUin, /*unsigned long unk
 
 void OnMessageCallback(const std::string& text)
 {
-    boost::property_tree::ptree item;
+    // Property item;
 
     spdlog::info(text);
 //    try {
