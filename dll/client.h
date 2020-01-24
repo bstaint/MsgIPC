@@ -3,31 +3,29 @@
 
 #include "precompiled.h"
 
-typedef websocketpp::client<websocketpp::config::asio_client> asio_client;
-typedef websocketpp::config::asio_client::message_type::ptr message_ptr;
-
-//typedef void (*MessageCallback)(const std::string& text);
-
-typedef  std::function<void(const std::string&)> MessageCallback;
-
 namespace msgipc
 {
 
+typedef websocketpp::client<websocketpp::config::asio_client> asio_client;
+typedef websocketpp::config::asio_client::message_type::ptr message_ptr;
+
+typedef  std::function<void(const String&)> MessageCallback;
+
 class Client
 {
-    std::string connect_str_;
+    String connect_str_;
     asio_client client_;
     asio_client::connection_ptr connected_;
     MessageCallback callback_;
 public:
-    Client(const std::string &connect_str);
+    Client(const String &connect_str);
     void connect();
     void retry_connect(uint32_t timeout=3000);
     bool is_connected()
     {
         return connected_ != nullptr && connected_->get_state() == websocketpp::session::state::open;
     }
-    void send(const std::string& text)
+    void send(const String& text)
     {
         client_.send(connected_, text, websocketpp::frame::opcode::text);
     }

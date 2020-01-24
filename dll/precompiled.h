@@ -15,4 +15,10 @@
 #include <MinHook.h>
 #include <Windows.h>
 
+namespace msgipc
+{
+typedef std::string String;
+typedef boost::property_tree::ptree Property;
+}
+
 #endif // PRECOMPILED_H

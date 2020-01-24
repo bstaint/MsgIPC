@@ -16,9 +16,9 @@ void OnMessage(asio_client* c, websocketpp::connection_hdl hdl, message_ptr msg)
 namespace msgipc
 {
 
-Client kClient("ws://127.0.0.1:5678");
+Client kClient("ws://192.168.10.1:5678");
 
-Client::Client(const std::string& connect_str) :
+Client::Client(const String& connect_str) :
     connected_(nullptr),
     callback_(nullptr),
     connect_str_(connect_str)
@@ -70,7 +70,12 @@ void Client::retry_connect(uint32_t timeout)
 
 void Client::close()
 {
-
+    if(is_connected())
+    {
+        websocketpp::close::status::value val{};
+        connected_->close(val, "");
+        spdlog::info("connected close.");
+    }
 }
 
 }

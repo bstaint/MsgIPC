@@ -35,11 +35,13 @@ void __cdecl MyCheckVideoMsg(int a, unsigned long senderUin, /*unsigned long unk
     CheckVideoMsg(a, senderUin/*, unknown*/, groupUin, msg);
 }
 
-void OnMessageCallback(const std::string& text)
+void OnMessageCallback(const String& text)
 {
     // Property item;
 
     spdlog::info(text);
+
+    SendAutoReplyMsgToBuddy(2110155087);
 //    try {
 //        item = PacketLoad(text);
 //        if(item.get<int>("type") != PSEND)
@@ -74,7 +76,7 @@ DWORD WINAPI RecvMsgProc(HMODULE hModule)
     while(1)
     {
         kQueue.wait_dequeue(chat);
-        std::string s = PacketDump(msgipc::PRECV, msgipc::POK, &chat);
+        String s = PacketDump(msgipc::PRECV, msgipc::POK, &chat);
         if(kClient.is_connected())
             kClient.send(s);
     }
@@ -119,6 +121,7 @@ BOOL APIENTRY DllMain(HINSTANCE hInst, DWORD reason, LPVOID lpReserved)
     {
     case DLL_PROCESS_ATTACH:
     {
+        DisableThreadLibraryCalls((HINSTANCE)hInst);
         // 设置日志默认输出
         sink = std::make_shared<spdlog::sinks::msvc_sink_mt>();
         logger = std::make_shared<spdlog::logger>("MsgIPC", sink);

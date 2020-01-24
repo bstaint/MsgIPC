@@ -5,7 +5,6 @@
 
 namespace msgipc {
 
-typedef boost::property_tree::ptree Property;
 
 enum type {
     PRECV,
@@ -23,10 +22,10 @@ enum err {
 class Message
 {
 protected:
-    std::string message_;
+    String message_;
 public:
     Message() : message_("") { }
-    Message(const std::string& message) : message_(message) { }
+    Message(const String& message) : message_(message) { }
 
     virtual void fill(Property& item)
     {
@@ -40,7 +39,7 @@ class MessageChat : public Message
 {
     uint32_t sender_;
     uint32_t group_;
-    std::string nickname_;
+    String nickname_;
 
 public:
     MessageChat() :
@@ -50,8 +49,8 @@ public:
         nickname_("")
     {}
 
-    MessageChat(uint32_t sender, uint32_t group, const std::string& nickname, 
-                                                 const std::string& message) :
+    MessageChat(uint32_t sender, uint32_t group, const String& nickname, 
+                                                 const String& message) :
         Message(message),
         sender_(sender),
         group_(group),
@@ -69,8 +68,8 @@ public:
     }
 };
 
-Property PacketLoad(const std::string &text);
-std::string PacketDump(uint8_t type,
+Property PacketLoad(const String &text);
+String PacketDump(uint8_t type,
                         int8_t err,
                         Message *message);
 

@@ -5,6 +5,7 @@ CheckVideoMsg_t CheckVideoMsg = NULL;
 GetMsgTime_t GetMsgTime = NULL;
 GetMsgAbstract_t GetMsgAbstract = NULL;
 GetNickname_t GetNickname = NULL;
+SendAutoReplyMsgToBuddy_t SendAutoReplyMsgToBuddy = NULL;
 
 void InitQQPtr()
 {
@@ -15,10 +16,14 @@ void InitQQPtr()
     ULONG_PTR GetMsgAbstractAddress = (ULONG_PTR)GetProcAddress(hModule, GetMsgAbstract_Symbol);
     ULONG_PTR GetNicknameAddress = (ULONG_PTR)GetProcAddress(hModule, GetNickname_Symbol);
 
+    hModule = GetModuleHandleA("apputil");
+    ULONG_PTR SendAutoReplyMsgToBuddyAddress = (ULONG_PTR)GetProcAddress(hModule, SendAutoReplyMsgToBuddy_Symbol);
+
 //    ULONG_PTR GetMsgAbstractAddress = (ULONG_PTR)GetProcAddress(hModule, GetMsgDumpString_Symbol);
     GetMsgTime = (GetMsgTime_t)GetMsgTimeAddress;
     GetMsgAbstract = (GetMsgAbstract_t)GetMsgAbstractAddress;
     GetNickname = (GetNickname_t)GetNicknameAddress;
+    SendAutoReplyMsgToBuddy = (SendAutoReplyMsgToBuddy_t)SendAutoReplyMsgToBuddyAddress;
     CheckVideoMsg = (CheckVideoMsg_t)MsgHookTarget;
 }
 

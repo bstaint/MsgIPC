@@ -11,8 +11,7 @@
 #define GetMsgTime_Symbol "?GetMsgTime@Msg@Util@@YA_JPAUITXMsgPack@@@Z"
 #define GetMsgDumpString_Symbol "?GetMsgDumpString@Msg@Util@@YA?AVCTXStringW@@PAUITXMsgPack@@@Z"
 #define GetNickname_Symbol "?GetNickname@Contact@Util@@YA?AVCTXStringW@@K@Z"
-
-// TODO: SendAutoReply API
+#define SendAutoReplyMsgToBuddy_Symbol "?SendAutoReplyMsgToBuddy@ChatSession@Util@@YAJK@Z"
 
 //void __cdecl Util::Msg::CheckVideoMsg(int,unsigned long,unsigned long,struct ITXMsgPack *)
  typedef void (__cdecl* CheckVideoMsg_t)(int, unsigned long, unsigned long, unsigned long *);
@@ -23,6 +22,8 @@ typedef __int64 (__cdecl* GetMsgTime_t)(unsigned long *);
 typedef void (__cdecl* GetMsgAbstract_t)(void *, unsigned long *);
 //class CTXStringW __cdecl Util::Contact::GetNickname(unsigned long)
 typedef void (__cdecl* GetNickname_t)(void *, unsigned long);
+//long __cdecl Util::ChatSession::SendAutoReplyMsgToBuddy(unsigned long)
+typedef long (__cdecl* SendAutoReplyMsgToBuddy_t)(unsigned long);
 
 // 初始化Hook函数指针
 void InitQQPtr();
@@ -38,5 +39,7 @@ extern GetMsgTime_t GetMsgTime;
 extern GetMsgAbstract_t GetMsgAbstract;
 // 通过QQ获取昵称
 extern GetNickname_t GetNickname;
+
+extern SendAutoReplyMsgToBuddy_t SendAutoReplyMsgToBuddy;
 
 #endif // QQDEF_H

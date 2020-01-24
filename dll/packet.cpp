@@ -2,7 +2,7 @@
 
 namespace msgipc {
 
-Property PacketLoad(const std::string& text)
+Property PacketLoad(const String& text)
 {
     std::istringstream iss;
     iss.str(text);
@@ -13,7 +13,7 @@ Property PacketLoad(const std::string& text)
     return item;
 }
 
-std::string PacketDump(uint8_t type, int8_t err, Message *message)
+String PacketDump(uint8_t type, int8_t err, Message *message)
 {
     std::stringstream is;
     Property item;
