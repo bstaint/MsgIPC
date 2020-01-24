@@ -5,11 +5,7 @@
 
 namespace msgipc {
 
-
-enum type {
-    PRECV,
-    PSEND
-};
+enum type { PRECV, PSEND };
 
 enum err {
     PUNKNOWN = -2,
@@ -23,6 +19,7 @@ class Message
 {
 protected:
     String message_;
+
 public:
     Message() : message_("") { }
     Message(const String& message) : message_(message) { }
@@ -42,20 +39,12 @@ class MessageChat : public Message
     String nickname_;
 
 public:
-    MessageChat() :
-        Message(""),
-        sender_(0),
-        group_(0),
-        nickname_("")
-    {}
-
-    MessageChat(uint32_t sender, uint32_t group, const String& nickname, 
-                                                 const String& message) :
-        Message(message),
-        sender_(sender),
-        group_(group),
-        nickname_(nickname)
-    {}
+    MessageChat() : Message(""), sender_(0), group_(0), nickname_("") {}
+    MessageChat(uint32_t sender,
+                uint32_t group,
+                const String& nickname,
+                const String& message) :
+        Message(message), sender_(sender), group_(group), nickname_(nickname) {}
 
     virtual void fill(Property& item)
     {

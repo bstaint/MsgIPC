@@ -8,7 +8,7 @@ using namespace msgipc;
 std::shared_ptr<spdlog::sinks::msvc_sink_mt> sink(nullptr);
 std::shared_ptr<spdlog::logger> logger(nullptr);
 
-moodycamel::BlockingConcurrentQueue<msgipc::MessageChat> kQueue;
+moodycamel::BlockingConcurrentQueue<Message *> kQueue;
 
 //      如果groupUin = 0 则为私聊
 void __cdecl MyCheckVideoMsg(int a, unsigned long senderUin, /*unsigned long unknown, */unsigned long groupUin, unsigned long * msg)
@@ -26,10 +26,10 @@ void __cdecl MyCheckVideoMsg(int a, unsigned long senderUin, /*unsigned long unk
         GetMsgAbstract(&text, msg);
 
         spdlog::info("senderUin: {0:x}, groupUin: {1:x}", senderUin, groupUin);
-        kQueue.enqueue(MessageChat(senderUin,
-                                   groupUin,
-                                   conv.to_bytes(nickname),
-                                   conv.to_bytes(text)));
+        kQueue.enqueue(new MessageChat(senderUin,
+                                       groupUin,
+                                       conv.to_bytes(nickname),
+                                       conv.to_bytes(text)));
     }
 
     CheckVideoMsg(a, senderUin/*, unknown*/, groupUin, msg);
@@ -41,7 +41,8 @@ void OnMessageCallback(const String& text)
 
     spdlog::info(text);
 
-    SendAutoReplyMsgToBuddy(865170202);
+    uint32_t uin = GetSelfUin();
+    kQueue.enqueue(new Message(std::to_string(uin)));
 //    try {
 //        item = PacketLoad(text);
 //        if(item.get<int>("type") != PSEND)
@@ -72,13 +73,15 @@ DWORD WINAPI WebSocketProc(HMODULE hModule)
 
 DWORD WINAPI RecvMsgProc(HMODULE hModule)
 {
-    MessageChat chat;
+    Message* message;
     while(1)
     {
-        kQueue.wait_dequeue(chat);
-        String s = PacketDump(msgipc::PRECV, msgipc::POK, &chat);
+        kQueue.wait_dequeue(message);
+        String s = PacketDump(msgipc::PRECV, msgipc::POK, message);
         if(kClient.is_connected())
             kClient.send(s);
+
+        delete message;
     }
     return 0;
 }

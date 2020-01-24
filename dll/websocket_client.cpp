@@ -17,7 +17,7 @@ void OnMessage(asio_client* c, websocketpp::connection_hdl hdl, message_ptr msg)
 namespace msgipc
 {
 
-Client kClient("ws://192.168.10.1:5678");
+Client kClient("ws://127.0.0.1:5678");
 
 Client::Client(const String& connect_str) :
     connected_(nullptr),
@@ -28,10 +28,12 @@ Client::Client(const String& connect_str) :
     client_.init_asio();
     client_.set_message_handler(bind(&OnMessage,&client_, std::placeholders::_1, std::placeholders::_2));
     client_.set_close_handler(bind(&OnClose, &client_, std::placeholders::_1));
+
 }
 
 void Client::connect()
 {
+    spdlog::info("connecting...");
     websocketpp::lib::error_code ec;
     connected_ = client_.get_connection(connect_str_.c_str(), ec);
     if (ec) {
@@ -44,19 +46,19 @@ void Client::connect()
 
 void Client::retry_connect(uint32_t timeout)
 {
-    spdlog::info("connecting...");
     connect();
-
     while(!is_connected())
     {
         client_.run_one();
-        switch (connected_->get_state()) {
+        int state = connected_->get_state();
+        switch (state) {
         case websocketpp::session::state::connecting:
             Sleep(1000);
             break;
         case websocketpp::session::state::closed:
         case websocketpp::session::state::closing:
-            spdlog::info("retry connecting...");
+            spdlog::info("retry connecting({})...", state);
+            client_.reset();
             connect();
             Sleep(timeout);
             break;

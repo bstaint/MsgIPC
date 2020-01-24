@@ -1,6 +1,6 @@
 import sys
 import json
-from PySide2.QtWidgets import QApplication, QWidget
+from PySide2.QtWidgets import QApplication, QWidget, QMessageBox
 from PySide2.QtCore import QFile
 from ui_form import Ui_Form
 from serve import Serve
@@ -16,14 +16,10 @@ class MainWindow(QWidget):
         self.serve.recv.connect(self.recvText)
 
     def pushButton1Clicked(self):
-        data = {
-            'type': 1,
-            'errno': 1
-        }
+        data = {'type': 1, 'errno': 1}
         self.serve.send(json.dumps(data))
 
     def recvText(self, text):
-        print(text)
         try:
             obj = json.loads(text)
         except json.decoder.JSONDecodeError:
@@ -31,7 +27,13 @@ class MainWindow(QWidget):
 
         if obj['errno'] == '0':
             msg = obj['message']
-            self.ui.listWidget.addItem(f'group:{msg["group"]} {msg["nickname"]}({msg["sender"]}): {msg["text"]}')
+            if isinstance(msg, str):
+                QMessageBox.information(self, 'test', msg)
+            else:
+                self.ui.listWidget.addItem(
+                    f'group:{msg["group"]} {msg["nickname"]}({msg["sender"]}): {msg["text"]}'
+                )
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
