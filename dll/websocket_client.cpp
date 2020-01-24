@@ -1,6 +1,7 @@
-#include "client.h"
+#include "websocket_client.h"
 #include "precompiled.h"
 
+using namespace msgipc;
 using websocketpp::lib::bind;
 
 void OnClose(asio_client* c, websocketpp::connection_hdl hdl) {

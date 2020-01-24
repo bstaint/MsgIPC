@@ -1,5 +1,5 @@
-#ifndef QQDEF_H
-#define QQDEF_H
+#ifndef QQ_DEFINITION_H
+#define QQ_DEFINITION_H
 
 #include "precompiled.h"
 
@@ -42,4 +42,4 @@ extern GetNickname_t GetNickname;
 
 extern SendAutoReplyMsgToBuddy_t SendAutoReplyMsgToBuddy;
 
-#endif // QQDEF_H
+#endif // QQ_DEFINITION_H

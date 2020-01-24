@@ -4,18 +4,18 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
-        client.cpp \
         dllmain.cpp \
-        packet.cpp \
-        qqdef.cpp
+        message.cpp \
+        qq_definition.cpp \
+        websocket_client.cpp
 
 LIBS += -luser32
 
 HEADERS += \
-    client.h \
-    packet.h \
+    message.h \
     precompiled.h \
-    qqdef.h
+    qq_definition.h \
+    websocket_client.h
 
 PRECOMPILED_HEADER = precompiled.h
 

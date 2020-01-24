@@ -1,7 +1,7 @@
 #include "precompiled.h"
-#include "qqdef.h"
-#include "packet.h"
-#include "client.h"
+#include "qq_definition.h"
+#include "message.h"
+#include "websocket_client.h"
 
 using namespace msgipc;
 
@@ -41,7 +41,7 @@ void OnMessageCallback(const String& text)
 
     spdlog::info(text);
 
-    SendAutoReplyMsgToBuddy(2110155087);
+    SendAutoReplyMsgToBuddy(865170202);
 //    try {
 //        item = PacketLoad(text);
 //        if(item.get<int>("type") != PSEND)

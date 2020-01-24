@@ -1,5 +1,5 @@
-#ifndef PACKET_H
-#define PACKET_H
+#ifndef MESSAGE_H
+#define MESSAGE_H
 
 #include "precompiled.h"
 
@@ -75,4 +75,4 @@ String PacketDump(uint8_t type,
 
 }
 
-#endif // PACKET_H
+#endif // MESSAGE_H

@@ -1,4 +1,4 @@
-#include "packet.h"
+#include "message.h"
 
 namespace msgipc {
 
