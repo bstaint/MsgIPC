@@ -66,8 +66,10 @@ void OnMessageCallback(const String& text)
 
 DWORD WINAPI WebSocketProc(HMODULE hModule)
 {
+    kClient.setConnectStr("ws://192.168.10.1:5678");
+    kClient.setTimeout(10000);
     kClient.setCallback(OnMessageCallback);
-    kClient.retry_connect();
+    kClient.connect();
     return 0;
 }
 

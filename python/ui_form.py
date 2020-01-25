@@ -34,6 +34,6 @@ class Ui_Form(object):
 
     def retranslateUi(self, Form):
         Form.setWindowTitle(QtWidgets.QApplication.translate("Form", "Form", None, -1))
-        self.pushButton.setText(QtWidgets.QApplication.translate("Form", "Action1", None, -1))
+        self.pushButton.setText(QtWidgets.QApplication.translate("Form", "GetSelfUin", None, -1))
         self.pushButton_2.setText(QtWidgets.QApplication.translate("Form", "Action2", None, -1))
 

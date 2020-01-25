@@ -17,10 +17,11 @@ class Client
     asio_client client_;
     asio_client::connection_ptr connected_;
     MessageCallback callback_;
+    uint32_t timeout_;
+
 public:
     Client(const String &connect_str);
     void connect();
-    void retry_connect(uint32_t timeout=3000);
     bool is_connected()
     {
         return connected_ != nullptr && connected_->get_state() == websocketpp::session::state::open;
@@ -31,16 +32,12 @@ public:
     }
     void close();
 
-    void setCallback(MessageCallback cb)
-    {
-        callback_ = cb;
-    }
+    void setTimeout(const uint32_t &timeout) { timeout_ = timeout; }
+    void setCallback(MessageCallback cb) { callback_ = cb; }
+    void setConnectStr(const String &connect_str) { connect_str_ = connect_str; }
 
-    MessageCallback callback() const
-    {
-        return callback_;
-    }
-
+    uint32_t timeout() const { return timeout_; }
+    MessageCallback callback() const { return callback_; }
 };
 
 extern Client kClient;

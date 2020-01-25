@@ -22,7 +22,7 @@
      <item>
       <widget class="QPushButton" name="pushButton">
        <property name="text">
-        <string>Action1</string>
+        <string>GetSelfUin</string>
        </property>
       </widget>
      </item>
