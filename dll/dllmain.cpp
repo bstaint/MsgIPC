@@ -37,17 +37,17 @@ void __cdecl MyCheckVideoMsg(int a, unsigned long senderUin, /*unsigned long unk
 
 void OnMessageCallback(const String& text)
 {
-    // Property item;
 
     spdlog::info(text);
 
     uint32_t uin = GetSelfUin();
     kQueue.enqueue(new Message(std::to_string(uin)));
+//    Property item;
 //    try {
 //        item = PacketLoad(text);
 //        if(item.get<int>("type") != PSEND)
 //        {
-//            std::cout << "invaild type\n";
+//            spdlog::error("invaild type");
 //            return;
 //        }
 
@@ -60,7 +60,7 @@ void OnMessageCallback(const String& text)
 //        }
 
 //    } catch (...) {
-//        std::cout << "unknown message\n";
+//        spdlog::error("unknown message");
 //    }
 }
 

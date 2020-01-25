@@ -11,6 +11,9 @@ python目录下nogui.py为非pyside2即可运行。
 
 `dev` 分支将zeromq替换成websocket方便功能扩展。
 
+- 支持断线重连。
+- 添加GetSelfUin接口获取自身QQ号使用案例。
+
 ## 截图
 ![screenshot](https://raw.githubusercontent.com/bstaint/MsgIPC/master/doc/screenshot.png)
 
