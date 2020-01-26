@@ -15,7 +15,7 @@ python目录下nogui.py为非pyside2即可运行。
 - 添加GetSelfUin接口获取自身QQ号使用案例。
 
 ## 截图
-![screenshot](https://raw.githubusercontent.com/bstaint/MsgIPC/master/doc/screenshot.png)
+![screenshot](https://raw.githubusercontent.com/bstaint/MsgIPC/dev/doc/screenshot.png)
 
 ## C++ dll
 
