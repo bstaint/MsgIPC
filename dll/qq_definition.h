@@ -30,7 +30,7 @@ void InitQQPtr();
 // 检查函数指针是否为空
 bool CheckPtrVaild();
 
-extern ULONG_PTR MsgHookTarget;
+extern ULONG_PTR CheckVideoMsgPtr;
 //
 extern CheckVideoMsg_t CheckVideoMsg;
 // 获取消息时间

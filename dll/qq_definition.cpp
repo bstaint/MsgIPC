@@ -1,6 +1,6 @@
 #include "qq_definition.h"
 
-ULONG_PTR MsgHookTarget = NULL;
+ULONG_PTR CheckVideoMsgPtr = NULL;
 CheckVideoMsg_t CheckVideoMsg = NULL;
 GetMsgTime_t GetMsgTime = NULL;
 GetMsgAbstract_t GetMsgAbstract = NULL;
@@ -11,19 +11,13 @@ void InitQQPtr()
 {
     HMODULE hModule = GetModuleHandleA("KernelUtil");
 
-    MsgHookTarget = (ULONG_PTR)GetProcAddress(hModule, CheckVideoMsg_Symbol);
-    ULONG_PTR GetMsgTimePtr = (ULONG_PTR)GetProcAddress(hModule, GetMsgTime_Symbol);
-    ULONG_PTR GetMsgAbstractPtr = (ULONG_PTR)GetProcAddress(hModule, GetMsgAbstract_Symbol);
-    ULONG_PTR GetNicknamePtr = (ULONG_PTR)GetProcAddress(hModule, GetNickname_Symbol);
-    ULONG_PTR GetSelfUinPtr = (ULONG_PTR)GetProcAddress(hModule, GetSelfUin_Symbol);
+    GetMsgTime = (GetMsgTime_t)GetProcAddress(hModule, GetMsgTime_Symbol);
+    GetMsgAbstract = (GetMsgAbstract_t)GetProcAddress(hModule, GetMsgAbstract_Symbol);
+    GetNickname = (GetNickname_t)GetProcAddress(hModule, GetNickname_Symbol);
+    GetSelfUin = (GetSelfUin_t)GetProcAddress(hModule, GetSelfUin_Symbol);
 
-//    ULONG_PTR GetMsgAbstractAddress = (ULONG_PTR)GetProcAddress(hModule, GetMsgDumpString_Symbol);
-    GetMsgTime = (GetMsgTime_t)GetMsgTimePtr;
-    GetMsgAbstract = (GetMsgAbstract_t)GetMsgAbstractPtr;
-    GetNickname = (GetNickname_t)GetNicknamePtr;
-    GetSelfUin = (GetSelfUin_t)GetSelfUinPtr;
-
-    CheckVideoMsg = (CheckVideoMsg_t)MsgHookTarget;
+    CheckVideoMsgPtr = (ULONG_PTR)GetProcAddress(hModule, CheckVideoMsg_Symbol);
+    CheckVideoMsg = (CheckVideoMsg_t)CheckVideoMsgPtr;
 }
 
 bool CheckPtrVaild()

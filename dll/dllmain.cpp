@@ -139,14 +139,14 @@ BOOL APIENTRY DllMain(HINSTANCE hInst, DWORD reason, LPVOID lpReserved)
         CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)WebSocketProc, NULL, 0, NULL);
         CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)RecvMsgProc, NULL, 0, NULL);
 
-        if(SetHook((LPVOID)MsgHookTarget, &MyCheckVideoMsg, &CheckVideoMsg))
+        if(SetHook((LPVOID)CheckVideoMsgPtr, &MyCheckVideoMsg, &CheckVideoMsg))
             spdlog::info("SetHook OK!");
     }
         break;
     case DLL_PROCESS_DETACH:
     {
 //        TODO: DLL Detach Crash.
-        if(UnHook((LPVOID)MsgHookTarget))
+        if(UnHook((LPVOID)CheckVideoMsgPtr))
             spdlog::info("UnHook OK!");
 
         MH_Uninitialize();
