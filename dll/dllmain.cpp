@@ -130,7 +130,7 @@ BOOL APIENTRY DllMain(HINSTANCE hInst, DWORD reason, LPVOID lpReserved)
 
         // 初始化minhook并hook
         MH_Initialize();
-        if(InitQQPtr()) return FALSE;
+        if(!InitQQPtr()) return FALSE;
 
         CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)WebSocketProc, NULL, 0, NULL);
         CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)RecvMsgProc, NULL, 0, NULL);
