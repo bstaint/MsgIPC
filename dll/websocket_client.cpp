@@ -1,24 +1,26 @@
 #include "websocket_client.h"
 #include "precompiled.h"
 
-using namespace msgipc;
-using websocketpp::lib::bind;
-
-void OnClose(asio_client* c, websocketpp::connection_hdl hdl) {
-    Sleep(msgipc::kClient.timeout());
-    spdlog::info("retry connecting...");
-    msgipc::kClient.connect();
-}
-
-void OnMessage(asio_client* c, websocketpp::connection_hdl hdl, message_ptr msg) {
-    if (msgipc::kClient.callback())
-        msgipc::kClient.callback()(msg->get_payload());
-}
+using std::bind;
+using std::placeholders::_1;
+using std::placeholders::_2;
 
 namespace msgipc
 {
 
 Client kClient("ws://127.0.0.1:5678");
+
+void OnClose(asio_client* c, websocketpp::connection_hdl hdl) {
+    Sleep(kClient.timeout());
+
+    spdlog::info("retry connecting...");
+    kClient.connect();
+}
+
+void OnMessage(asio_client* c, websocketpp::connection_hdl hdl, message_ptr msg) {
+    if (kClient.callback())
+        kClient.callback()(msg->get_payload());
+}
 
 Client::Client(const String& connect_str) :
     connected_(nullptr),
@@ -28,9 +30,9 @@ Client::Client(const String& connect_str) :
 {
     client_.clear_access_channels(websocketpp::log::alevel::all);
     client_.init_asio();
-    client_.set_message_handler(bind(&OnMessage,&client_, std::placeholders::_1, std::placeholders::_2));
-    client_.set_fail_handler(bind(&OnClose, &client_, std::placeholders::_1));
-    client_.set_close_handler(bind(&OnClose, &client_, std::placeholders::_1));
+    client_.set_message_handler(bind(&OnMessage,&client_, ::_1, ::_2));
+    client_.set_fail_handler(bind(&OnClose, &client_, ::_1));
+    client_.set_close_handler(bind(&OnClose, &client_, ::_1));
 }
 
 void Client::connect()
