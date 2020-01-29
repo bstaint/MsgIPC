@@ -26,9 +26,7 @@ typedef void (__cdecl* GetNickname_t)(void *, unsigned long);
 typedef unsigned long (__cdecl* GetSelfUin_t)(void);
 
 // 初始化Hook函数指针
-void InitQQPtr();
-// 检查函数指针是否为空
-bool CheckPtrVaild();
+bool InitQQPtr();
 
 extern ULONG_PTR CheckVideoMsgPtr;
 //

@@ -15,22 +15,18 @@ void __cdecl MyCheckVideoMsg(int a, unsigned long senderUin, /*unsigned long unk
 {
     static std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> conv;
 
-    spdlog::info("MyCheckVideoMsg begin");
-    if(CheckPtrVaild())
-    {
-        wchar_t * nickname = NULL;
-        wchar_t * text = NULL;
-    //        获取消息时间
-    //    __int64 timestamp = GetMsgTime(msg);
-        GetNickname(&nickname, senderUin);
-        GetMsgAbstract(&text, msg);
+    wchar_t * nickname = NULL;
+    wchar_t * text = NULL;
+//        获取消息时间
+//    __int64 timestamp = GetMsgTime(msg);
+    GetNickname(&nickname, senderUin);
+    GetMsgAbstract(&text, msg);
 
-        spdlog::info("senderUin: {0:x}, groupUin: {1:x}", senderUin, groupUin);
-        kQueue.enqueue(new MessageChat(senderUin,
-                                       groupUin,
-                                       conv.to_bytes(nickname),
-                                       conv.to_bytes(text)));
-    }
+    spdlog::info("senderUin: {0:x}, groupUin: {1:x}", senderUin, groupUin);
+    kQueue.enqueue(new MessageChat(senderUin,
+                                   groupUin,
+                                   conv.to_bytes(nickname),
+                                   conv.to_bytes(text)));
 
     CheckVideoMsg(a, senderUin/*, unknown*/, groupUin, msg);
 }
@@ -134,20 +130,20 @@ BOOL APIENTRY DllMain(HINSTANCE hInst, DWORD reason, LPVOID lpReserved)
 
         // 初始化minhook并hook
         MH_Initialize();
-        InitQQPtr();
+        if(InitQQPtr()) return FALSE;
 
         CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)WebSocketProc, NULL, 0, NULL);
         CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)RecvMsgProc, NULL, 0, NULL);
 
         if(SetHook((LPVOID)CheckVideoMsgPtr, &MyCheckVideoMsg, &CheckVideoMsg))
-            spdlog::info("SetHook OK!");
+            spdlog::info("SetHook OK.");
     }
         break;
     case DLL_PROCESS_DETACH:
     {
 //        TODO: DLL Detach Crash.
         if(UnHook((LPVOID)CheckVideoMsgPtr))
-            spdlog::info("UnHook OK!");
+            spdlog::info("UnHook OK.");
 
         MH_Uninitialize();
     }

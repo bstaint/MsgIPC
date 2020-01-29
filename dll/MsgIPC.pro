@@ -24,6 +24,6 @@ generals += \
 
 include (E:/3rdParty/boost.pri)
 include (E:/3rdParty/debug/minhook.pri)
-include (E:/3rdParty/debug/concurrentqueue.pri)
 include (E:/3rdParty/net/websocketpp.pri)
+include (E:/3rdParty/general/concurrentqueue.pri)
 include (E:/3rdParty/general.pri)
