@@ -33,11 +33,9 @@ void __cdecl MyCheckVideoMsg(int a, unsigned long senderUin, /*unsigned long unk
 
 void OnMessageCallback(const String& text)
 {
-
     spdlog::info(text);
 
-    uint32_t uin = GetSelfUin();
-    kQueue.enqueue(new Message(std::to_string(uin)));
+    kQueue.enqueue(new Message(PSELFUIN, std::to_string(GetSelfUin())));
 //    Property item;
 //    try {
 //        item = PacketLoad(text);
@@ -75,7 +73,7 @@ DWORD WINAPI RecvMsgProc(HMODULE hModule)
     while(1)
     {
         kQueue.wait_dequeue(message);
-        String s = PacketDump(msgipc::PRECV, msgipc::POK, message);
+        String s = MessageDump( message);
         if(kClient.is_connected())
             kClient.send(s);
 

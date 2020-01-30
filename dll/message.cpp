@@ -2,7 +2,7 @@
 
 namespace msgipc {
 
-Property PacketLoad(const String& text)
+Property MessageLoad(const String& text)
 {
     std::istringstream iss;
     iss.str(text);
@@ -13,12 +13,13 @@ Property PacketLoad(const String& text)
     return item;
 }
 
-String PacketDump(uint8_t type, int8_t err, Message *message)
+String MessageDump(Message *message)
 {
     std::stringstream is;
+
     Property item;
-    item.put("type", type);
-    item.put("errno", err);
+
+    item.put("errno", message->err());
     message->fill(item);
 
     boost::property_tree::write_json(is, item);

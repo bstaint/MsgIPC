@@ -10,14 +10,14 @@ namespace msgipc
 
 Client kClient("ws://127.0.0.1:5678");
 
-void OnClose(asio_client* c, websocketpp::connection_hdl hdl) {
+void OnClose(asio_client*, websocketpp::connection_hdl) {
     Sleep(kClient.timeout());
 
     spdlog::info("retry connecting...");
     kClient.connect();
 }
 
-void OnMessage(asio_client* c, websocketpp::connection_hdl hdl, message_ptr msg) {
+void OnMessage(asio_client*, websocketpp::connection_hdl, message_ptr msg) {
     if (kClient.callback())
         kClient.callback()(msg->get_payload());
 }

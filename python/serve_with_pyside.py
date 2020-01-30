@@ -4,6 +4,16 @@ from PySide2.QtWidgets import QApplication, QWidget, QMessageBox
 from PySide2.QtCore import QFile
 from ui_form import Ui_Form
 from serve import Serve
+from enum import Enum, unique
+
+@unique
+class Message(Enum):
+    PUNKNOWN = -1
+    PERROR = 0
+    POK = 1
+    PSELFUIN = 2
+    PCHAT = 3
+    PTEST = 4
 
 class MainWindow(QWidget):
     def __init__(self):
@@ -16,8 +26,7 @@ class MainWindow(QWidget):
         self.serve.recv.connect(self.recvText)
 
     def pushButton1Clicked(self):
-        data = {'type': 1, 'errno': 1}
-        self.serve.send(json.dumps(data))
+        self.serve.send(json.dumps({'errno': Message.PSELFUIN.value }))
 
     def recvText(self, text):
         try:
@@ -25,14 +34,13 @@ class MainWindow(QWidget):
         except json.decoder.JSONDecodeError:
             return
 
-        if obj['errno'] == '0':
-            msg = obj['message']
-            if isinstance(msg, str):
-                QMessageBox.information(self, 'test', msg)
-            else:
-                self.ui.listWidget.addItem(
-                    f'group:{msg["group"]} {msg["nickname"]}({msg["sender"]}): {msg["text"]}'
-                )
+        errno = int(obj['errno'])
+        if errno == Message.PCHAT.value:
+            self.ui.listWidget.addItem(
+                'group:{group} {nickname}({sender}): {text}'.format(**obj['message'])
+            )
+        elif errno == Message.PSELFUIN.value:
+            QMessageBox.information(self, 'test', msg)
 
 
 if __name__ == "__main__":
