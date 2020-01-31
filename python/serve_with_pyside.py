@@ -40,7 +40,7 @@ class MainWindow(QWidget):
                 'group:{group} {nickname}({sender}): {text}'.format(**obj['message'])
             )
         elif errno == Message.PSELFUIN.value:
-            QMessageBox.information(self, 'test', msg)
+            QMessageBox.information(self, 'test', obj['message'])
 
 
 if __name__ == "__main__":
