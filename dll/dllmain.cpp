@@ -33,29 +33,24 @@ void __cdecl MyCheckVideoMsg(int a, unsigned long senderUin, /*unsigned long unk
 
 void OnMessageCallback(const String& text)
 {
-    spdlog::info(text);
+    Property item;
+    try {
+        item = MessageLoad(text);
 
-    kQueue.enqueue(new Message(PSELFUIN, std::to_string(GetSelfUin())));
-//    Property item;
-//    try {
-//        item = PacketLoad(text);
-//        if(item.get<int>("type") != PSEND)
-//        {
-//            spdlog::error("invaild type");
-//            return;
-//        }
-
-//        switch (item.get<int>("errno")) {
-//        case PTEST:
-//            std::cout << "This is a test command\n";
-//            break;
-//        default:
-//            break;
-//        }
-
-//    } catch (...) {
-//        spdlog::error("unknown message");
-//    }
+        switch (item.get<int>("errno")) {
+        case PSELFUIN:
+            kQueue.enqueue(new Message(PSELFUIN, std::to_string(GetSelfUin())));
+            break;
+        case PTEST:
+            std::cout << "This is a test command\n";
+            break;
+        default:
+            spdlog::error("unknown message");
+            break;
+        }
+    } catch (...) {
+        spdlog::error("can't parser message.");
+    }
 }
 
 DWORD WINAPI WebSocketProc(HMODULE hModule)

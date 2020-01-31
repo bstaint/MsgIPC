@@ -1,5 +1,7 @@
 #include "message.h"
 
+using namespace boost::property_tree;
+
 namespace msgipc {
 
 Property MessageLoad(const String& text)
@@ -8,21 +10,20 @@ Property MessageLoad(const String& text)
     iss.str(text);
 
     Property item;
-    boost::property_tree::json_parser::read_json(iss, item);
+    json_parser::read_json(iss, item);
 
     return item;
 }
 
 String MessageDump(Message *message)
 {
-    std::stringstream is;
-
     Property item;
+    std::stringstream is;
 
     item.put("errno", message->err());
     message->fill(item);
+    write_json(is, item);
 
-    boost::property_tree::write_json(is, item);
     return is.str();
 }
 

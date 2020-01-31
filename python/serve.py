@@ -19,7 +19,7 @@ class Serve(QObject):
     def onNewConnection(self):
         if not self.client:
             self.client = self.server.nextPendingConnection()
-            self.client.textMessageReceived.connect(self.proessTextMessage)
+            self.client.textMessageReceived.connect(self.recv)
 
     def proessTextMessage(self, message):
         self.recv.emit(message)

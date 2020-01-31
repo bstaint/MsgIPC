@@ -21,12 +21,17 @@ class MainWindow(QWidget):
         self.ui = Ui_Form()
         self.ui.setupUi(self)
         self.ui.pushButton.clicked.connect(self.pushButton1Clicked)
-        self.ui.pushButton_2.clicked.connect(self.pushButton1Clicked)
+        self.ui.pushButton_2.clicked.connect(self.pushButton2Clicked)
         self.serve = Serve()
         self.serve.recv.connect(self.recvText)
 
     def pushButton1Clicked(self):
         self.serve.send(json.dumps({'errno': Message.PSELFUIN.value }))
+
+    def pushButton2Clicked(self):
+        self.serve.send(json.dumps({'errno': Message.PTEST.value }))
+        # error message
+        self.serve.send(json.dumps({'type': Message.PTEST.value }))
 
     def recvText(self, text):
         try:
