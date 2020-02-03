@@ -42,7 +42,7 @@ void OnMessageCallback(const String& text)
             kQueue.enqueue(new Message(PSELFUIN, std::to_string(GetSelfUin())));
             break;
         case PTEST:
-            std::cout << "This is a test command\n";
+            spdlog::info("This is a test command\n");
             break;
         default:
             spdlog::error("unknown message");
