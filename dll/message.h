@@ -6,12 +6,12 @@
 namespace msgipc {
 
 enum err {
-    PUNKNOWN = -1,
-    PERROR = 0,
-    POK = 1,
-    PSELFUIN,
-    PCHAT,
-    PTEST
+    MSG_UNKNOWN = -1,
+    MSG_ERROR = 0,
+    MSG_OK = 1,
+    MSG_SELFUIN,
+    MSG_CHAT,
+    MSG_TEST
 };
 
 class Message
@@ -21,7 +21,7 @@ protected:
     String message_;
 
 public:
-    Message() :  errno_(PUNKNOWN),  message_("") {}
+    Message() :  errno_(MSG_UNKNOWN),  message_("") {}
     Message(const uint8_t err, const String& message) :
         errno_(err), message_(message) {}
 
@@ -41,7 +41,7 @@ public:
     MessageChat() : Message(), sender_(0), group_(0), nickname_("") {}
     MessageChat(uint32_t sender, uint32_t group,
                 const String& nickname, const String& message) :
-        Message(PCHAT, message),
+        Message(MSG_CHAT, message),
         sender_(sender), group_(group), nickname_(nickname) {}
 
     void fill(Property& item)

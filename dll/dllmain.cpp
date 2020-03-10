@@ -38,10 +38,10 @@ void OnMessageCallback(const String& text)
         item = MessageLoad(text);
 
         switch (item.get<int>("errno")) {
-        case PSELFUIN:
-            kQueue.enqueue(new Message(PSELFUIN, std::to_string(GetSelfUin())));
+        case MSG_SELFUIN:
+            kQueue.enqueue(new Message(MSG_SELFUIN, std::to_string(GetSelfUin())));
             break;
-        case PTEST:
+        case MSG_TEST:
             spdlog::info("This is a test command\n");
             break;
         default:
@@ -115,7 +115,7 @@ BOOL APIENTRY DllMain(HINSTANCE hInst, DWORD reason, LPVOID lpReserved)
     {
     case DLL_PROCESS_ATTACH:
     {
-        DisableThreadLibraryCalls((HINSTANCE)hInst);
+        DisableThreadLibraryCalls(hInst);
         // 设置日志默认输出
         sink = std::make_shared<spdlog::sinks::msvc_sink_mt>();
         logger = std::make_shared<spdlog::logger>("MsgIPC", sink);

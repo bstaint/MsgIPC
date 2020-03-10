@@ -19,11 +19,11 @@ HEADERS += \
 
 PRECOMPILED_HEADER = precompiled.h
 
-generals += \
-        debug/spdlog
+3rdparty += \
+    debug/spdlog \
+    debug/minhook \
+    net/websocketpp \
+    general/concurrentqueue
 
+include (E:/3rdParty/3rdparty.pri)
 include (E:/3rdParty/boost.pri)
-include (E:/3rdParty/debug/minhook.pri)
-include (E:/3rdParty/net/websocketpp.pri)
-include (E:/3rdParty/general/concurrentqueue.pri)
-include (E:/3rdParty/general.pri)

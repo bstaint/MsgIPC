@@ -20,7 +20,7 @@ class Client
     uint32_t timeout_;
 
 public:
-    Client(const String &connect_str);
+    Client(const String &connect_str="");
     void connect();
     bool is_connected()
     {

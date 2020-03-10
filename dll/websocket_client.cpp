@@ -8,7 +8,7 @@ using std::placeholders::_2;
 namespace msgipc
 {
 
-Client kClient("ws://127.0.0.1:5678");
+Client kClient;
 
 void OnClose(asio_client*, websocketpp::connection_hdl) {
     Sleep(kClient.timeout());
@@ -30,7 +30,7 @@ Client::Client(const String& connect_str) :
 {
     client_.clear_access_channels(websocketpp::log::alevel::all);
     client_.init_asio();
-    client_.set_message_handler(bind(&OnMessage,&client_, ::_1, ::_2));
+    client_.set_message_handler(bind(&OnMessage, &client_, ::_1, ::_2));
     client_.set_fail_handler(bind(&OnClose, &client_, ::_1));
     client_.set_close_handler(bind(&OnClose, &client_, ::_1));
 }
