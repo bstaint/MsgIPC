@@ -64,15 +64,22 @@ DWORD WINAPI WebSocketProc(HMODULE hModule)
 
 DWORD WINAPI RecvMsgProc(HMODULE hModule)
 {
-    Message* message;
+    Message* message = nullptr;
     while(1)
     {
         kQueue.wait_dequeue(message);
-        String s = MessageDump( message);
+        if (message == nullptr)
+        {
+            spdlog::warn("message ptr should not empty");
+            continue;
+        }
+
+        String s = MessageDump(message);
         if(kClient.is_connected())
             kClient.send(s);
 
         delete message;
+        message = nullptr;
     }
     return 0;
 }

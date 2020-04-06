@@ -8,12 +8,12 @@ from enum import Enum, unique
 
 @unique
 class Message(Enum):
-    PUNKNOWN = -1
-    PERROR = 0
-    POK = 1
-    PSELFUIN = 2
-    PCHAT = 3
-    PTEST = 4
+    UNKNOWN = -1
+    ERROR = 0
+    OK = 1
+    SELFUIN = 2
+    CHAT = 3
+    TEST = 4
 
 class MainWindow(QWidget):
     def __init__(self):
@@ -40,11 +40,11 @@ class MainWindow(QWidget):
             return
 
         errno = int(obj['errno'])
-        if errno == Message.PCHAT.value:
+        if errno == Message.CHAT.value:
             self.ui.listWidget.addItem(
                 'group:{group} {nickname}({sender}): {text}'.format(**obj['message'])
             )
-        elif errno == Message.PSELFUIN.value:
+        elif errno == Message.SELFUIN.value:
             QMessageBox.information(self, 'test', obj['message'])
 
 
