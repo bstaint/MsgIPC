@@ -1,2 +1,1 @@
-asyncio==3.4.3
 websockets==9.1
